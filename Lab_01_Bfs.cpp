@@ -1,24 +1,24 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
-    int n;
-    cout << "Enter the number of vertices:";
-    cin >> n;
+    int n, edges;
+    cout << "Enter the number of vertices and edges: ";
+    cin >> n >> edges;
 
-    vector<vector<int>> graph(n + 1, vector<int>(n + 1));
+    // Adjacency List declaration
+    vector<int> adj[n + 1];
 
-    cout << "Enter graph data in matrix form:\n";
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            cin >> graph[i][j];
-        }
+    cout << "Enter the edges (u v):\n";
+    for (int i = 0; i < edges; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u); // For undirected graph
     }
 
     int start;
-    cout << "Enter the starting vertex:";
+    cout << "Enter the starting vertex: ";
     cin >> start;
 
     vector<bool> visited(n + 1, false);
@@ -27,7 +27,7 @@ int main() {
     q.push(start);
     visited[start] = true;
 
-    cout << "The node which are reachable are:\n";
+    cout << "The nodes which are reachable are:\n";
 
     while (!q.empty()) {
         int node = q.front();
@@ -35,10 +35,11 @@ int main() {
 
         cout << node << " ";
 
-        for (int i = 1; i <= n; i++) {
-            if (graph[node][i] == 1 && !visited[i]) {
-                visited[i] = true;
-                q.push(i);
+        // Look at only actual neighbors
+        for (int neighbor : adj[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.push(neighbor);
             }
         }
     }
@@ -46,14 +47,17 @@ int main() {
     return 0;
 }
 
-
-// 8
-// 0 1 1 1 0 0 0 0
-// 1 0 0 0 1 1 0 0
-// 1 0 0 0 0 0 0 1
-// 1 0 0 0 0 0 0 1
-// 0 1 0 0 0 0 1 0
-// 0 1 0 0 0 0 1 0
-// 0 0 0 0 1 1 0 1
-// 0 0 1 1 0 0 1 0
-// 1
+/*
+Sample Input:
+8 9
+1 2
+1 3
+1 4
+2 5
+2 6
+3 8
+4 8
+5 7
+6 7
+1
+*/

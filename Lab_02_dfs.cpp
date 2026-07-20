@@ -1,24 +1,24 @@
-#include <iostream>
-#include <vector>
-#include <stack>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
-    int n;
-    cout << "Enter the number of vertices:";
-    cin >> n;
+    int n, edges;
+    cout << "Enter the number of vertices and edges: ";
+    cin >> n >> edges;
 
-    vector<vector<int>> graph(n + 1, vector<int>(n + 1));
+    // Adjacency List declaration
+    vector<int> adj[n + 1];
 
-    cout << "Enter graph data in matrix form:\n";
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            cin >> graph[i][j];
-        }
+    cout << "Enter the edges (u v):\n";
+    for (int i = 0; i < edges; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u); // For undirected graph
     }
 
     int start;
-    cout << "Enter the starting vertex:";
+    cout << "Enter the starting vertex: ";
     cin >> start;
 
     vector<bool> visited(n + 1, false);
@@ -26,7 +26,7 @@ int main() {
 
     st.push(start);
 
-    cout << "The node which are reachable are:\n";
+    cout << "The nodes which are reachable are:\n";
 
     while (!st.empty()) {
         int node = st.top();
@@ -36,10 +36,12 @@ int main() {
             visited[node] = true;
             cout << node << " ";
 
-            // Push neighbors in reverse order for correct DFS sequence
-            for (int i = n; i >= 1; i--) {
-                if (graph[node][i] == 1 && !visited[i]) {
-                    st.push(i);
+            // Push neighbors into stack
+            // (Reversing the loop is optional, but it helps match the exact order of recursive DFS if needed)
+            for (int i = adj[node].size() - 1; i >= 0; i--) {
+                int neighbor = adj[node][i];
+                if (!visited[neighbor]) {
+                    st.push(neighbor);
                 }
             }
         }
@@ -47,3 +49,18 @@ int main() {
 
     return 0;
 }
+
+/*
+Sample Input:
+8 9
+1 2
+1 3
+1 4
+2 5
+2 6
+3 8
+4 8
+5 7
+6 7
+1
+*/
